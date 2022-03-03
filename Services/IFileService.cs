@@ -7,5 +7,5 @@
 public interface IFileService
 {
     void Read();
-    void Write();
+    void Write(string saveString);
 }
