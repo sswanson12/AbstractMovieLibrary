@@ -1,7 +1,4 @@
 ﻿using System;
-using ApplicationTemplate.Files;
-using ApplicationTemplate.Libraries;
-using ApplicationTemplate.Media;
 using ApplicationTemplate.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -25,11 +22,7 @@ internal class Startup
 
         // Add new lines of code here to register any interfaces and concrete services you create
         services.AddTransient<IMainService, MainService>();
-        services.AddTransient<IFilePath, FilePath>();
-        // services.AddTransient<IMediaLibrary<Movie>, MovieLibrary>();
-        // services.AddTransient<IMediaLibrary<Show>, ShowLibrary>();
-        // services.AddTransient<IMediaLibrary<Video>, VideoLibrary>();
-        services.AddTransient<IFileService, FileService<MovieLibrary>>();
+        services.AddTransient<IFileService, FileService>();
 
         return services.BuildServiceProvider();
     }

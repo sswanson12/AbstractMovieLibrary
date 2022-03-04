@@ -1,4 +1,7 @@
-﻿namespace ApplicationTemplate.Services;
+﻿using ApplicationTemplate.Libraries;
+using ApplicationTemplate.Media;
+
+namespace ApplicationTemplate.Services;
 
 /// <summary>
 ///     This service interface only exists an example.
@@ -6,6 +9,6 @@
 /// </summary>
 public interface IFileService
 {
-    void Read();
+    void ReadTo(IMediaLibrary<Movie> library);
     void Write(string saveString);
 }

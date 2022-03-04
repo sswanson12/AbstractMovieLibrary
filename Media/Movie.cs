@@ -12,10 +12,9 @@ public class Movie : Media
 
     public Movie(int movieId, string title, List<string> genres)
     {
-        this._id = movieId;
-        this._title = title;
-        this._genres = genres;
-        
+        _id = movieId;
+        _title = title;
+        _genres = genres;
     }
 
     public int Id => _id;

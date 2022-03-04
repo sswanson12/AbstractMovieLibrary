@@ -4,11 +4,13 @@ namespace ApplicationTemplate.Libraries;
 
 public interface IMediaLibrary<TE>
 {
-    void addMedia(string csvLine);
+    void AddMedia(string csvLine);
 
-    void AddMedia(TE media);
+    bool AddMedia(string newTitle, List<string> genreList);
 
     string ListMedia();
+
+    string ListMedia(int count);
 
     string SaveString();
 }

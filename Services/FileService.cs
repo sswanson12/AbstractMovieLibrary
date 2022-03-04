@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using ApplicationTemplate.Files;
 using ApplicationTemplate.Libraries;
 using ApplicationTemplate.Media;
 using Microsoft.Extensions.Logging;
@@ -12,32 +10,31 @@ namespace ApplicationTemplate.Services;
 ///     This concrete service and method only exists an example.
 ///     It can either be copied and modified, or deleted.
 /// </summary>
-public class FileService<TE> : IFileService
+public class FileService : IFileService
 {
-    private readonly IFilePath _filePath;
+    private readonly string _filePath = "Files/mlLibrary/movies.csv";
     private readonly ILogger<IFileService> _logger;
-    private readonly IMediaLibrary<TE> _library;
 
-    public FileService(IFilePath filePath, ILogger<IFileService> logger, IMediaLibrary<TE> library)
+    public FileService(ILogger<IFileService> logger)
     {
-        _filePath = filePath;
-        _logger = logger; 
-        _library = library;
+        _logger = logger;
     }
-    public void Read()
+
+    public void ReadTo(IMediaLibrary<Movie> library)
     {
         _logger.Log(LogLevel.Information, "Reading");
-        
-        StreamReader sr = new StreamReader(_filePath.getFilePath());
+
+        var sr = new StreamReader(_filePath);
         sr.ReadLine(); //Skips first line of file (movieId,title,genres)
-        
-        
+
+
         while (!sr.EndOfStream)
         {
             var currentLine = sr.ReadLine() ?? throw new InvalidOperationException();
-            
-            _library.addMedia(currentLine);
+
+            library.AddMedia(currentLine);
         }
+
         sr.Close();
     }
 
@@ -45,7 +42,9 @@ public class FileService<TE> : IFileService
     {
         _logger.Log(LogLevel.Information, "Writing");
 
-        StreamWriter sw = new StreamWriter(_filePath.getFilePath());
+        var sw = new StreamWriter(_filePath);
+        
+        sw.Write(saveString);
 
         sw.Close();
     }
