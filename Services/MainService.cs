@@ -186,7 +186,7 @@ public class MainService : IMainService
             writers = new string[numWriters];
             for (var i = 0; i < numWriters; i++)
             {
-                Console.Write($"Please enter writer {i}: ");
+                Console.Write($"Please enter writer {i+1}: ");
                 writers[i] = Console.ReadLine();
             }
         } while (!library.AddMedia(new Show(-1, newTitle, season, episode, writers)));
@@ -225,7 +225,7 @@ public class MainService : IMainService
             regions = new int[numRegions];
             for (var i = 0; i < numRegions; i++)
             {
-                Console.Write($"Please enter region {i}: ");
+                Console.Write($"Please enter region {i+1}: ");
                 regions[i] = Convert.ToInt32(Console.ReadLine());
             }
         } while (!library.AddMedia(new Video(-1, newTitle, format, length, regions)));
