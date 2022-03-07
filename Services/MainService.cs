@@ -55,7 +55,7 @@ public class MainService : IMainService
     private void MovieMenu()
     {
         string choice;
-        _fileService.SetFilePath("Files/mlLibrary/movies.csv");
+        _fileService.SetFilePath("Files/jsonFiles/movies.json");
         _fileService.ReadTo(_movieLibrary);
         do
         {
@@ -69,14 +69,14 @@ public class MainService : IMainService
                 AddToLibrary(_movieLibrary);
                 _fileService.Write(_movieLibrary);
             }
-            else if (choice == "2") Console.WriteLine(_movieLibrary.ListMedia(10));
+            else if (choice == "2") Console.WriteLine(_movieLibrary.ListMedia());
         } while (choice != "X");
     }
 
     private void ShowMenu()
     {
         string choice;
-        _fileService.SetFilePath("Files/mlLibrary/shows.csv");
+        _fileService.SetFilePath("Files/jsonFiles/shows.json");
         _fileService.ReadTo(_showLibrary);
         do
         {
@@ -97,7 +97,7 @@ public class MainService : IMainService
     private void VideoMenu()
     {
         string choice;
-        _fileService.SetFilePath("Files/mlLibrary/videos.csv");
+        _fileService.SetFilePath("Files/jsonFiles/videos.json");
         _fileService.ReadTo(_videoLibrary);
         do
         {
