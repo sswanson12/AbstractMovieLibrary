@@ -10,5 +10,10 @@ namespace ApplicationTemplate.Services;
 public interface IFileService
 {
     void ReadTo(IMediaLibrary<Movie> library);
-    void Write(string saveString);
+    void ReadTo(IMediaLibrary<Show> library);
+    void ReadTo(IMediaLibrary<Video> library);
+    void Write(IMediaLibrary<Movie> library);
+    void Write(IMediaLibrary<Show> library);
+    void Write(IMediaLibrary<Video> library);
+    void SetFilePath(string filePath);
 }

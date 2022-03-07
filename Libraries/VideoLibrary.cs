@@ -1,32 +1,77 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using ApplicationTemplate.Media;
 
 namespace ApplicationTemplate.Libraries;
 
 public class VideoLibrary : MediaLibrary<Video>
 {
+    
+    private readonly List<Video> _library;
+    public VideoLibrary()
+    {
+        _library = new List<Video>();
+        
+    }
     public override void AddMedia(string csvLine)
     {
-        throw new System.NotImplementedException();
+        var lineSplitUp = csvLine.Split(',');
+
+        var regionsSplitUp = lineSplitUp[4].Split('|');
+
+        var regionsIntArray = new int[regionsSplitUp.Length];
+
+        for (var i = regionsSplitUp.Length; i > 0; i--)
+        {
+            regionsIntArray[i] = Convert.ToInt32(regionsSplitUp[i]);
+        }
+        
+        _library.Add(new Video(Convert.ToInt32(lineSplitUp[0]), lineSplitUp[1], lineSplitUp[2], Convert.ToInt32(lineSplitUp[3]), regionsIntArray));
     }
 
-    public override bool AddMedia(string newTitle, List<string> genreList)
+    public override bool AddMedia(Video video)
     {
-        throw new System.NotImplementedException();
+        int newId;
+        
+        if (_library.Count == 0)
+        {
+            newId = 1;
+        } else newId = (_library[^1].Id) + 1;
+
+        foreach (var testVideo in _library)
+        {
+            if (video.Title == testVideo.Title)
+            {
+                video = null;
+                return false;
+            }
+        }
+
+        video.Id = newId;
+
+        _library.Add(video);
+
+        return true;
     }
 
     public override string ListMedia()
     {
-        throw new System.NotImplementedException();
+        return _library.Aggregate("Video ID: Video Title", (current, video) => current + $"\n{video.Id}: {video.Title}");
     }
 
     public override string ListMedia(int count)
     {
-        throw new System.NotImplementedException();
-    }
+        var listedVideos = "Video ID: Video Title";
 
-    public override string SaveString()
+        for (var i = 0; i < count; i++) listedVideos += $"\n{_library[i].Id}: {_library[i].Title}";
+
+        return listedVideos;
+    }
+    
+    public override List<Video> GetLibrary()
     {
-        throw new System.NotImplementedException();
+        return _library;
     }
 }

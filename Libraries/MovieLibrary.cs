@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using ApplicationTemplate.Media;
 
 namespace ApplicationTemplate.Libraries;
 
 public class MovieLibrary : MediaLibrary<Movie>
 {
-    private readonly List<Movie> _library;
 
+    private readonly List<Movie> _library;
     public MovieLibrary()
     {
         _library = new List<Movie>();
+        
     }
 
 
@@ -28,14 +30,28 @@ public class MovieLibrary : MediaLibrary<Movie>
         _library.Add(new Movie(Convert.ToInt32(lineSplitUp[0]), lineSplitUp[1], genresList));
     }
 
-    public override bool AddMedia(string newTitle, List<string> genreList)
+    public override bool AddMedia(Movie movie)
     {
-        var newId = (_library[_library.Count - 1].Id) + 1;
+        int newId;
+        
+        if (_library.Count == 0)
+        {
+            newId = 1;
+        } else newId = (_library[^1].Id) + 1;
 
-        foreach (var item in _library)
-            if (newTitle.Equals(item.Title))
+        foreach (var testMovie in _library)
+        {
+            if (movie.Title == testMovie.Title)
+            {
+                movie = null; //I didn't like the idea of having a random movie floating around the heap for no reason
                 return false;
-        _library.Add(new Movie(newId, newTitle, genreList));
+            }
+        }
+
+        movie.Id = newId;
+
+        _library.Add(movie);
+
         return true;
     }
 
@@ -54,20 +70,8 @@ public class MovieLibrary : MediaLibrary<Movie>
         return listedMovies;
     }
 
-    public override string SaveString()
+    public override List<Movie> GetLibrary()
     {
-        var csvLines = "Movie ID,Movie Title (Release),Genres";
-
-        foreach (var movie in _library)
-        {
-            csvLines += $"\n{movie.Id},{movie.Title},";
-            
-            //had this in a foreach loop, this was suggested by rider.
-            csvLines = movie.Genres.Aggregate(csvLines, (current, genre) => current + $"{genre}|");
-
-            csvLines = csvLines[..^1];
-        }
-
-        return csvLines;
+        return _library;
     }
 }

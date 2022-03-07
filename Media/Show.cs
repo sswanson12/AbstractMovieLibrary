@@ -8,6 +8,15 @@ public class Show : Media
     private int _episode;
     private string[] _writers;
 
+    public Show(int id, string title, int season, int episode, string[] writers)
+    {
+        _id = id;
+        _title = title;
+        _season = season;
+        _episode = episode;
+        _writers = writers;
+    }
+
     public Show(string title, int season, int episode, string[] writers)
     {
         _title = title;

@@ -6,11 +6,11 @@ public interface IMediaLibrary<TE>
 {
     void AddMedia(string csvLine);
 
-    bool AddMedia(string newTitle, List<string> genreList);
+    bool AddMedia(TE media);
 
     string ListMedia();
 
     string ListMedia(int count);
 
-    string SaveString();
+    List<TE> GetLibrary();
 }

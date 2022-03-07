@@ -5,19 +5,17 @@ namespace ApplicationTemplate.Media;
 
 public class Movie : Media
 {
-    private readonly int _id;
-
     private string _title;
     private List<string> _genres;
 
     public Movie(int movieId, string title, List<string> genres)
     {
-        _id = movieId;
+        Id = movieId;
         _title = title;
         _genres = genres;
     }
 
-    public int Id => _id;
+    public int Id { get; set; }
 
     public string Title
     {

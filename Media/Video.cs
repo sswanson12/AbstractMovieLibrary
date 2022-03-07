@@ -10,6 +10,15 @@ public class Video : Media
     private int _length;
     private int[] _regions;
 
+    public Video(int id, string title, string format, int length, int[] regions)
+    {
+        _id = id;
+        _title = title;
+        _format = format;
+        _length = length;
+        _regions = regions;
+    }
+
     public Video(string title, string format, int length, int[] regions)
     {
         _title = title;
