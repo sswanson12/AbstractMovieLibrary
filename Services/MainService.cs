@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ApplicationTemplate.Libraries;
 using ApplicationTemplate.Media;
+using ApplicationTemplate.Searching;
 
 namespace ApplicationTemplate.Services;
 
@@ -12,6 +13,7 @@ namespace ApplicationTemplate.Services;
 public class MainService : IMainService
 {
     private readonly IFileService _fileService;
+    private readonly ISearchService _searchService;
     private readonly IMediaLibrary<Movie> _movieLibrary;
     private readonly IMediaLibrary<Show> _showLibrary;
     private readonly IMediaLibrary<Video> _videoLibrary;
@@ -22,6 +24,17 @@ public class MainService : IMainService
         _movieLibrary = new MovieLibrary();
         _showLibrary = new ShowLibrary();
         _videoLibrary = new VideoLibrary();
+
+        _fileService.SetFilePath("Files/jsonFiles/movies.json");
+        _fileService.ReadTo(_movieLibrary);
+        
+        _fileService.SetFilePath("Files/jsonFiles/shows.json");
+        _fileService.ReadTo(_showLibrary);
+        
+        _fileService.SetFilePath("Files/jsonFiles/videos.json");
+        _fileService.ReadTo(_videoLibrary);
+        
+        _searchService = new SearchService(_movieLibrary, _showLibrary, _videoLibrary);
     }
 
     public void Invoke()
@@ -30,8 +43,8 @@ public class MainService : IMainService
 
         do
         {
-            Console.WriteLine("What media format would you like to work with?\n"
-                              + "1) Movies\n2) Shows\n3) Videos");
+            Console.WriteLine("What would you like to do?\n"
+                              + "1) Open Movie Library\n2) Open Show Library\n3) Open Video Library\n4) Search Libraries");
             choice = Console.ReadLine();
 
             switch (choice)
@@ -45,18 +58,20 @@ public class MainService : IMainService
                 case "3":
                     VideoMenu();
                     break;
+                case "4":
+                    SearchMenu();
+                    break;
                 default:
                     choice = "x";
                     break;
             }
-        } while (choice.Equals("x"));
+        } while (!choice.Equals("x"));
     }
 
     private void MovieMenu()
     {
-        string choice;
         _fileService.SetFilePath("Files/jsonFiles/movies.json");
-        _fileService.ReadTo(_movieLibrary);
+        string choice;
         do
         {
             Console.WriteLine("1) Add Movie");
@@ -75,9 +90,8 @@ public class MainService : IMainService
 
     private void ShowMenu()
     {
-        string choice;
         _fileService.SetFilePath("Files/jsonFiles/shows.json");
-        _fileService.ReadTo(_showLibrary);
+        string choice;
         do
         {
             Console.WriteLine("1) Add Show");
@@ -96,9 +110,8 @@ public class MainService : IMainService
 
     private void VideoMenu()
     {
-        string choice;
         _fileService.SetFilePath("Files/jsonFiles/videos.json");
-        _fileService.ReadTo(_videoLibrary);
+        string choice;
         do
         {
             Console.WriteLine("1) Add Video");
@@ -113,6 +126,18 @@ public class MainService : IMainService
             }
             else if (choice == "2") Console.WriteLine(_videoLibrary.ListMedia());
         } while (choice != "X");
+    }
+
+    private void SearchMenu()
+    {
+        Console.WriteLine("Please enter the title you're looking for: ");
+
+        var results = _searchService.Search(Console.ReadLine());
+
+        foreach (var media in results)
+        {
+            Console.WriteLine($"{media.GetType()} - {media.GetName()}");
+        }
     }
 
     private static void AddToLibrary(IMediaLibrary<Movie> library)
@@ -215,10 +240,10 @@ public class MainService : IMainService
             newTitle = $"{newTitle} ({releaseYear})";
 
             Console.Write("Please enter what format the video is in: ");
-            format = Console.ReadLine();
+            format = Convert.ToString(Console.ReadLine());
 
             Console.Write("Please enter the length of the video in minutes: ");
-            length = Convert.ToInt32(Console.ReadLine);
+            length = Convert.ToInt32(Console.ReadLine());
 
             Console.Write("How many regions is this video available in? ");
             var numRegions = Convert.ToInt32(Console.ReadLine());

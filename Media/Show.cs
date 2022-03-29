@@ -17,14 +17,6 @@ public class Show : Media
         _writers = writers;
     }
 
-    public Show(string title, int season, int episode, string[] writers)
-    {
-        _title = title;
-        _season = season;
-        _episode = episode;
-        _writers = writers;
-    }
-
     public int Id
     {
         get => _id;
@@ -53,5 +45,15 @@ public class Show : Media
     {
         get => _writers;
         set => _writers = value;
+    }
+
+    public override string GetName()
+    {
+        return _title;
+    }
+    
+    public override string GetType()
+    {
+        return "Show";
     }
 }

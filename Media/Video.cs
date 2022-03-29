@@ -19,14 +19,6 @@ public class Video : Media
         _regions = regions;
     }
 
-    public Video(string title, string format, int length, int[] regions)
-    {
-        _title = title;
-        _format = format;
-        _length = length;
-        _regions = regions;
-    }
-
     public int Id
     {
         get => _id;
@@ -55,5 +47,15 @@ public class Video : Media
     {
         get => _regions;
         set => _regions = value;
+    }
+    
+    public override string GetName()
+    {
+        return _title;
+    }
+
+    public override string GetType()
+    {
+        return "Video";
     }
 }

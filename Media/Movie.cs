@@ -28,4 +28,14 @@ public class Movie : Media
         get => _genres;
         set => _genres = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+    public override string GetName()
+    {
+        return _title;
+    }
+    
+    public override string GetType()
+    {
+        return "Movie";
+    }
 }
